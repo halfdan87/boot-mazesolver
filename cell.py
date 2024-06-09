@@ -4,7 +4,8 @@ from line import Line
 
 
 class Cell:
-    def __init__(self, topLeftPoint, bottomRightPoint, window):
+    def __init__(self, topLeftPoint, bottomRightPoint, window=None):
+        self.visited = False
         self.leftWall = True
         self.rightWall = True
         self.upWall = True
@@ -20,16 +21,31 @@ class Cell:
         )
 
     def draw(self):
+        if self.window is None:
+            return
         if self.leftWall:
-            self.window.draw_line(Line(self.topLeftPoint, self.bottomLeftPoint), "blue")
+            self.window.draw_line(Line(self.bottomLeftPoint, self.topLeftPoint), "blue")
+        else:
+            self.window.draw_line(Line(self.bottomLeftPoint, self.topLeftPoint), "white")
+
         if self.rightWall:
-            self.window.draw_line(Line(self.topRightPoint, self.bottomRightPoint), "blue")
+            self.window.draw_line(Line(self.bottomRightPoint, self.topRightPoint), "blue")
+        else:
+            self.window.draw_line(Line(self.bottomRightPoint, self.topRightPoint), "white")
+
         if self.upWall:
-            self.window.draw_line(Line(self.topRightPoint, self.topLeftPoint), "blue")
+            self.window.draw_line(Line(self.topLeftPoint, self.topRightPoint), "blue")
+        else:
+            self.window.draw_line(Line(self.topLeftPoint, self.topRightPoint), "white")
+
         if self.downWall:
             self.window.draw_line(Line(self.bottomLeftPoint, self.bottomRightPoint), "blue")
+        else:
+            self.window.draw_line(Line(self.bottomLeftPoint, self.bottomRightPoint), "white")
 
     def draw_move(self, to_cell, undo=False):
+        if self.window is None:
+            return
         colour = "red"
         if undo:
             colour = "gray"
