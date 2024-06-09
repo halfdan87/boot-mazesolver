@@ -60,17 +60,12 @@ class Maze:
         while True:
             to_visit = []
 
-            # determine which cell(s) to visit next
-            # left
             if i > 0 and not self.cells[i - 1][j].visited:
                 to_visit.append((i - 1, j))
-            # right
             if i < self.cols - 1 and not self.cells[i + 1][j].visited:
                 to_visit.append((i + 1, j))
-            # up
             if j > 0 and not self.cells[i][j - 1].visited:
                 to_visit.append((i, j - 1))
-            # down
             if j < self.rows - 1 and not self.cells[i][j + 1].visited:
                 to_visit.append((i, j + 1))
 
@@ -114,7 +109,6 @@ class Maze:
         return self._solve_r(0, 0)
 
     def _solve_r(self, x, y):
-        self._animate()
         cur = self.cells[x][y]
         cur.visited = True
         if x == self.cols - 1 and y == self.rows - 1:
@@ -124,12 +118,14 @@ class Maze:
         walls = [cur.leftWall, cur.rightWall, cur.upWall, cur.downWall]
 
         for i in range(4):
-            self._animate()
             new_x, new_y = dirs[i].x + x, dirs[i].y + y
             if not walls[i] and 0 <= new_x < self.cols and 0 <= new_y < self.rows:
                 target = self.cells[new_x][new_y]
                 if not target.visited:
+                    cur.draw_move(target)
+                    self._animate()
                     if self._solve_r(new_x, new_y):
                         return True
                     cur.draw_move(target, undo=True)
+                    self._animate()
         return False

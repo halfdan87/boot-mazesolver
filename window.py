@@ -7,8 +7,8 @@ class Window:
         self.root.title("Maze solver")
         self.root.geometry(f"{width}x{height}")
         self.running = False
-        self.canvas = Canvas()
-        self.canvas.pack()
+        self.canvas = Canvas(self.root)
+        self.canvas.pack(fill=BOTH, expand=True)
         self.root.protocol("WM_DELETE_WINDOW", self.close)
 
     def redraw(self):
